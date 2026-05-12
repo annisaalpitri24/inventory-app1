@@ -1,0 +1,17 @@
+.btn-custom {
+    background: linear-gradient(135deg, #ec4899, #db2777);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 14px;
+    transition: 0.3s ease;
+    box-shadow: 0 6px 15px rgba(219, 39, 119, 0.25);
+}
+
+.btn-custom:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #db2777, #be185d);
+    color: white;
+    box-shadow: 0 10px 20px rgba(219, 39, 119, 0.35);
+}

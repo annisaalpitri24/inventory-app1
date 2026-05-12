@@ -7,7 +7,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/product', [ProductController::class, 'index']);
+Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/insert', [ProductController::class, 'insert']);
-Route::get('/update/{id}', [ProductController::class, 'update']);
+Route::get('/edit/{id}', [ProductController::class, 'edit']);
+Route::post('/update/{id}', [ProductController::class, 'update']);
 Route::get('/delete/{id}', [ProductController::class, 'delete']);
+Route::get('/create', [ProductController::class, 'create']);
+Route::post('/store', [ProductController::class, 'store']);
