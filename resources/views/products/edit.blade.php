@@ -71,9 +71,9 @@
                         Tersedia
                     </option>
 
-                    <option value="habis"
-                        {{ $product->status == 'habis' ? 'selected' : '' }}>
-                        Habis
+                    <option value="tidak tersedia"
+                        {{ $product->status == 'tidak tersedia' ? 'selected' : '' }}>
+                        tidak tersedia
                     </option>
                 </select>
             </div>
