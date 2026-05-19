@@ -2,99 +2,108 @@
 
 @section('content')
 
-<style>
-    body {
-        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-        min-height: 100vh;
-    }
-
-    .card {
-        border: none;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.95);
-    }
-
-    h3 {
-        color: #d63384;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .form-control {
-        border-radius: 10px;
-    }
-
-    .btn-primary {
-        background: #d63384;
-        border: none;
-        border-radius: 10px;
-        width: 10%;
-        padding: 10px;
-        font-weight: bold;
-    }
-
-    .btn-primary:hover {
-        background: #c2186a;
-    }
-</style>
-
 <div class="container mt-5">
-    <div class="card p-4 shadow">
-        <h3>Edit Product</h3>
 
-        <form action="/update/{{ $product->id }}" method="POST">
-            @csrf
+    <h2 class="mb-4 text-center">Edit Product</h2>
 
-            <div class="mb-3">
-                <label>Nama Product</label>
-                <input type="text" name="name" class="form-control"
-                    value="{{ $product->name }}">
-            </div>
+    <form action="/update/{{ $product->id }}" method="POST">
+        @csrf
 
-            <div class="mb-3">
-                <label>Harga</label>
-                <input type="number" name="price" class="form-control"
-                    value="{{ $product->price }}">
-            </div>
+        <!-- Nama Product -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Nama Product</label>
 
-            <div class="mb-3">
-                <label>Deskripsi</label>
-                <textarea name="description" class="form-control">{{ $product->description }}</textarea>
-            </div>
+            <input
+                type="text"
+                name="name"
+                id="name"
+                class="form-control"
+                value="{{ $product->name }}"
+                required>
+        </div>
 
-            <div class="mb-3">
-                <label>Status</label>
-                <select name="status" class="form-control">
-                    <option value="tersedia"
-                        {{ $product->status == 'tersedia' ? 'selected' : '' }}>
-                        Tersedia
-                    </option>
+        <!-- Harga -->
+        <div class="mb-3">
+            <label for="price" class="form-label">Harga</label>
 
-                    <option value="tidak tersedia"
-                        {{ $product->status == 'tidak tersedia' ? 'selected' : '' }}>
-                        tidak tersedia
-                    </option>
-                </select>
-            </div>
+            <input
+                type="number"
+                name="price"
+                id="price"
+                class="form-control"
+                value="{{ $product->price }}"
+                required>
+        </div>
 
-            <div class="mb-3">
-                <label>Kategori</label>
-                <select name="category_id" class="form-control">
-                    @foreach($category as $c)
-                        <option value="{{ $c->id }}"
-                            {{ $product->category_id == $c->id ? 'selected' : '' }}>
-                            {{ $c->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+        <!-- Deskripsi -->
+        <div class="mb-3">
+            <label for="description" class="form-label">Deskripsi</label>
+
+            <textarea
+                name="description"
+                id="description"
+                class="form-control"
+                rows="4">{{ $product->description }}</textarea>
+        </div>
+
+        <!-- Status -->
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+
+            <select
+                name="status"
+                id="status"
+                class="form-select"
+                required>
+
+                <option value="tersedia"
+                    {{ $product->status == 'tersedia' ? 'selected' : '' }}>
+                    Tersedia
+                </option>
+
+                <option value="tidak tersedia"
+                    {{ $product->status == 'tidak tersedia' ? 'selected' : '' }}>
+                    Tidak Tersedia
+                </option>
+
+            </select>
+        </div>
+
+        <!-- Kategori -->
+        <div class="mb-3">
+            <label for="category_id" class="form-label">Kategori</label>
+
+            <select
+                name="category_id"
+                id="category_id"
+                class="form-select"
+                required>
+
+                @foreach($category as $c)
+                <option value="{{ $c->id }}"
+                    {{ $product->category_id == $c->id ? 'selected' : '' }}>
+                    {{ $c->name }}
+                </option>
+                @endforeach
+
+            </select>
+        </div>
+
+        <!-- Button -->
+        <div class="mt-4 d-flex justify-content-between">
+
+            <a href="/product" class="btn btn-secondary">
+                Kembali
+            </a>
 
             <button type="submit" class="btn btn-primary">
                 Update
             </button>
-        </form>
-    </div>
+
+        </div>
+
+    </form>
+
 </div>
 
 @endsection
