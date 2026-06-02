@@ -56,13 +56,13 @@
                 class="form-select"
                 required>
 
-                <option value="tersedia"
-                    {{ $product->status == 'tersedia' ? 'selected' : '' }}>
+                <option value="Tersedia"
+                    {{ $product->status == 'Tersedia' ? 'selected' : '' }}>
                     Tersedia
                 </option>
 
-                <option value="tidak tersedia"
-                    {{ $product->status == 'tidak tersedia' ? 'selected' : '' }}>
+                <option value="Tidak Tersedia"
+                    {{ $product->status == 'Tidak Tersedia' ? 'selected' : '' }}>
                     Tidak Tersedia
                 </option>
 
