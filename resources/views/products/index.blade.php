@@ -70,7 +70,15 @@
 
                 <!-- Status -->
                 <td>
-                    {{ $p->status }}
+                    @if(strtolower($p->status) == 'tersedia')
+                    <span class="badge bg-success">
+                        {{ $p->status }}
+                    </span>
+                    @else
+                    <span class="badge bg-danger">
+                        {{ $p->status }}
+                    </span>
+                    @endif
                 </td>
 
                 <!-- Tombol -->
