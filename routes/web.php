@@ -17,3 +17,7 @@ Route::get('/create', [ProductController::class, 'create']);
 Route::post('/store', [ProductController::class, 'store']);
 
 Route::resource('categories', CategoryController::class);
+
+Route::get('/', function () {
+    return view('home');
+})->name('home');
