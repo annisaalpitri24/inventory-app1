@@ -1,125 +1,131 @@
 @extends('layouts.main')
 
 @section('content')
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Daftar Barang Inventaris</h1>
 
-<div class="container mt-5">
+    @if(Auth::check() && Auth::user()->role === 'admin')
+    <a href="{{ route('product.create') }}" class="btn btn-primary">
+        + Tambah Barang
+    </a>
+    @endif
+</div>
 
-    <!-- Judul -->
-    <h2 class="text-center mb-4">
-        Daftar Barang Inventaris
-    </h2>
+@if(session('success'))
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button"
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
+</div>
+@endif
 
-    <!-- Tombol Tambah -->
-    <div class="mb-3">
-        <a href="/create" class="btn btn-primary">
-            Tambah Data
-        </a>
+@if(session('error'))
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ session('error') }}
+    <button type="button"
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
+</div>
+@endif
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Barang</th>
+                        <th>Kategori</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
+                        <th>Deskripsi</th>
+                        <th>Status</th>
+
+                        @if(Auth::check() && Auth::user()->role === 'admin')
+                        <th>Aksi</th>
+                        @endif
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @forelse($products as $p)
+                    <tr>
+                        <td>
+                            {{ $products->firstItem()
+                                        ? $products->firstItem() + $loop->index
+                                        : $loop->iteration }}
+                        </td>
+
+                        <td>{{ $p->name }}</td>
+
+                        <td>
+                            {{ $p->category->name ?? '-' }}
+                        </td>
+
+                        <td>
+                            Rp {{ number_format($p->price, 0, ',', '.') }}
+                        </td>
+
+                        <td>{{ $p->stock }}</td>
+
+                        <td>{{ $p->description }}</td>
+
+                        <td>
+                            <span class="badge {{ $p->status == 'Tersedia' ? 'bg-success' : 'bg-danger' }}">
+                                {{ $p->status }}
+                            </span>
+                        </td>
+
+                        @if(Auth::check() && Auth::user()->role === 'admin')
+                        <td class="text-nowrap">
+
+                            <a href="{{ route('product.edit', $p->id) }}"
+                                class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+
+                            <a href="{{ route('product.delete', $p->id) }}"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Yakin mau hapus data ini?')">
+                                Hapus
+                            </a>
+
+                        </td>
+                        @endif
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="{{ Auth::check() && Auth::user()->role === 'admin' ? 8 : 7 }}"
+                            class="text-center text-muted">
+                            Tidak ada data barang yang ditemukan.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+    <div class="text-muted small">
+        @if($products->total())
+        Menampilkan {{ $products->firstItem() }}
+        sampai {{ $products->lastItem() }}
+        dari {{ $products->total() }} data
+        @endif
     </div>
 
-    <!-- Table -->
-    <table class="table table-bordered">
-
-        <thead class="table-light">
-            <tr>
-                <th>No</th>
-                <th>Nama Barang</th>
-                <th>Kategori</th>
-                <th>Harga</th>
-                <th>Stok</th>
-                <th>Deskripsi</th>
-                <th>Status</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            @forelse($products as $p)
-
-            <tr>
-
-                <!-- Nomor -->
-                <td>
-                    {{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}
-                </td>
-
-                <!-- Nama Barang -->
-                <td>
-                    {{ $p->name }}
-                </td>
-
-                <!-- Kategori -->
-                <td>
-                    {{ $p->category->name ?? '-' }}
-                </td>
-
-                <!-- Harga -->
-                <td>
-                    Rp {{ number_format($p->price, 0, ',', '.') }}
-                </td>
-
-                <!-- Stok -->
-                <td>
-                    {{ $p->stock }}
-                </td>
-
-                <!-- Deskripsi -->
-                <td>
-                    {{ $p->description }}
-                </td>
-
-                <!-- Status -->
-                <td>
-                    @if(strtolower($p->status) == 'tersedia')
-                    <span class="badge bg-success">
-                        {{ $p->status }}
-                    </span>
-                    @else
-                    <span class="badge bg-danger">
-                        {{ $p->status }}
-                    </span>
-                    @endif
-                </td>
-
-                <!-- Tombol -->
-                <td>
-
-                    <a href="/edit/{{ $p->id }}"
-                        class="btn btn-warning btn-sm">
-
-                        Update
-                    </a>
-
-                    <a href="/delete/{{ $p->id }}"
-                        class="btn btn-danger btn-sm"
-                        onclick="return confirm('Apakah yakin ingin menghapus data ini?')">
-
-                        Delete
-                    </a>
-
-                </td>
-
-            </tr>
-
-            @empty
-
-            <tr>
-                <td colspan="8" class="text-center">
-                    Data tidak ada
-                </td>
-            </tr>
-
-            @endforelse
-
-        </tbody>
-
-    </table>
-
-    <!-- Pagination -->
-    <div class="mt-3">
+    <div>
         {{ $products->links('pagination::bootstrap-5') }}
     </div>
 
 </div>
-
 @endsection
