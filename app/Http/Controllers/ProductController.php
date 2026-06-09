@@ -57,7 +57,7 @@ class ProductController extends Controller
         $product = Product::find($id);
 
         if (!$product) {
-            return redirect('/product')
+            return redirect('/product') 
                 ->with('error', 'Data tidak ditemukan');
         }
 
@@ -73,6 +73,7 @@ class ProductController extends Controller
             'category_id' => 'required',
             'name' => 'required',
             'price' => 'required',
+             'stock' => 'required',
             'status' => 'required'
         ]);
 
@@ -87,6 +88,7 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
             'name' => $request->name,
             'price' => $request->price,
+             'stock' => $request->stock,
             'description' => $request->description,
             'status' => $request->status
         ]);
