@@ -4,15 +4,14 @@
 
 <div class="container mt-5">
 
-    <h2 class="mb-4 text-center">Edit Product</h2>
+    <h2 class="mb-4 text-center">Edit Produk</h2>
 
     <form action="/update/{{ $product->id }}" method="POST">
         @csrf
 
-        <!-- Nama Product -->
+        <!-- Nama Produk -->
         <div class="mb-3">
-            <label for="name" class="form-label">Nama Product</label>
-
+            <label for="name" class="form-label">Nama Produk</label>
             <input
                 type="text"
                 name="name"
@@ -22,10 +21,29 @@
                 required>
         </div>
 
+        <!-- Kategori -->
+        <div class="mb-3">
+            <label for="category_id" class="form-label">Kategori</label>
+
+            <select
+                name="category_id"
+                id="category_id"
+                class="form-select"
+                required>
+
+                @foreach($category as $c)
+                    <option value="{{ $c->id }}"
+                        {{ $product->category_id == $c->id ? 'selected' : '' }}>
+                        {{ $c->name }}
+                    </option>
+                @endforeach
+
+            </select>
+        </div>
+
         <!-- Harga -->
         <div class="mb-3">
             <label for="price" class="form-label">Harga</label>
-
             <input
                 type="number"
                 name="price"
@@ -35,20 +53,31 @@
                 required>
         </div>
 
+        <!-- Stok -->
+        <div class="mb-3">
+            <label for="stock" class="form-label">Stok</label>
+            <input
+                type="number"
+                name="stock"
+                id="stock"
+                class="form-control"
+                value="{{ $product->stock }}"
+                required>
+        </div>
+
         <!-- Deskripsi -->
         <div class="mb-3">
             <label for="description" class="form-label">Deskripsi</label>
-
             <textarea
                 name="description"
                 id="description"
-                class="form-control"
-                rows="4">{{ $product->description }}</textarea>
+                rows="4"
+                class="form-control">{{ $product->description }}</textarea>
         </div>
 
         <!-- Status -->
         <div class="mb-3">
-            <label for="status" class="form-label">Status</label>
+            <label for="status" class="form-label">Status Produk</label>
 
             <select
                 name="status"
@@ -69,27 +98,7 @@
             </select>
         </div>
 
-        <!-- Kategori -->
-        <div class="mb-3">
-            <label for="category_id" class="form-label">Kategori</label>
-
-            <select
-                name="category_id"
-                id="category_id"
-                class="form-select"
-                required>
-
-                @foreach($category as $c)
-                <option value="{{ $c->id }}"
-                    {{ $product->category_id == $c->id ? 'selected' : '' }}>
-                    {{ $c->name }}
-                </option>
-                @endforeach
-
-            </select>
-        </div>
-
-        <!-- Button -->
+        <!-- Tombol -->
         <div class="mt-4 d-flex justify-content-between">
 
             <a href="/product" class="btn btn-secondary">
@@ -97,7 +106,7 @@
             </a>
 
             <button type="submit" class="btn btn-primary">
-                Update
+                Update Produk
             </button>
 
         </div>
