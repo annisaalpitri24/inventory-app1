@@ -1,50 +1,78 @@
-<!-- Menggunakan file layout utama kita yang bernama 'main' -->
 @extends('layouts.main')
-<!-- Blok konten di bawah ini yang akan masuk ke dalam tag 
-@yield('content') -->
+
 @section('content')
 
-<div class="d-flex justify-content-between mb-3">
-    <h2>Daftar Kategori</h2>
-    <!-- Link arah ke Route Create -->
-    <a href="{{ route('categories.create') }}" class="btn btn-primary">
-        + Tambah Kategori
-    </a>
-</div>
-<!-- Pengecekkan dan pencetakan pesan sukses flash-session -->
-@if (session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-    </div> 
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Daftar Kategori</h1>
+    @if(Auth::check() && Auth::user()->role === 'admin')
+        <a href="{{ route('categories.create') }}" class="btn btn-primary">
+            + Tambah Kategori
+        </a>
     @endif
-    <table class="table table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>No</th>
-                <th>Nama Kategori</th>
-                <th width="150px">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Kita loop data hasil tarikan Eloquent ORM -->
-            <!-- $index untuk mendapat nomor urutan asli bawaan foreach -->
-            @foreach ($categories as $index => $cat)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $cat->name }}</td>
-                <!-- Kolom tombol interaksi -->
+</div>
+
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>No</th>
+            <th>Nama Kategori</th>
+            @if(Auth::check() && Auth::user()->role === 'admin')
+                <th>Aksi</th>
+            @endif
+        </tr>
+    </thead>
+
+    <tbody>
+        @forelse($categories as $index => $category)
+        <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $category->name }}</td>
+            @if(Auth::check() && Auth::user()->role === 'admin')
                 <td>
-                    <a href="{{ route('categories.edit', $cat->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                    <!-- Form khusus hapus untuk melindungi dari pencurian klik GET -->
-                    <form action="{{ route('categories.destroy', $cat->id) }}"
-                        method="POST" class="d-inline">
+                    <a href="{{ route('categories.edit', $category->id) }}"
+                       class="btn btn-warning btn-sm">
+                       Edit
+                    </a>
+
+                    <form action="{{ route('categories.destroy', $category->id) }}"
+                          method="POST"
+                          style="display:inline;">
+
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-sm btn-danger" onclick="return confirm('Hapus Kategori ini?')">Hapus</button>
+
+                        <button type="submit"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Yakin hapus data?')">
+                            Hapus
+                        </button>
+
                     </form>
                 </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-    @endsection
+            @endif
+        </tr>
+        @empty
+        <tr>
+            <td colspan="3" class="text-center text-muted py-3">
+                Tidak ada data kategori yang ditemukan.
+            </td>
+        </tr>
+        @endforelse
+    </tbody>
+</table>
+
+@endsection
