@@ -8,22 +8,30 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            // tambah field
-        
-            $table->enum('status', ['tersedia', 'tidak tersedia'])->default('tersedia');
+        // Tambah kolom 'status' hanya jika belum ada
+        if (!Schema::hasColumn('products', 'status')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->enum('status', ['tersedia', 'tidak tersedia'])->default('tersedia');
+            });
+        }
 
-            // ubah tipe price
+        // Ubah tipe kolom 'price'
+        Schema::table('products', function (Blueprint $table) {
             $table->bigInteger('price')->change();
         });
     }
 
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-           
+        // Hapus kolom 'status' jika ada
+        if (Schema::hasColumn('products', 'status')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->dropColumn('status');
+            });
+        }
 
-            // rollback price (misal ke integer)
+        // Rollback tipe 'price' (misal kembali ke integer)
+        Schema::table('products', function (Blueprint $table) {
             $table->integer('price')->change();
         });
     }
